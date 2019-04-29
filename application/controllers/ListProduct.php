@@ -11,9 +11,7 @@ class ListProduct extends CI_Controller
 
     public function index(){
         // count quantity from basket
-       
-        $this->load->view('showproduct');   
-        
+        $this->load->view('showproduct');
     }
 
     public function list_porduct(){
@@ -98,4 +96,54 @@ class ListProduct extends CI_Controller
                 "<b>ราคาสุทธิ $totalPrice บาท</b></td></tr>";
             echo "</table>";
     }
+
+    public function removeBasket(){
+
+        $sessionID = $this->session->session_id;
+        $removeProductID = $this->input->get('productID');
+        if($removeProductID > 0){
+            
+            $this->product_v2->delete_product($sessionID,$removeProductID);
+        }
+       
+        $select_qu = $this->product_v2->left_join_product($sessionID);
+        $totalPrice = 0;
+        echo "<form id='form1' name='form1' method='get'>";
+        // ดึงข้อมูลรายการสินค้าออกจากตะกร้า
+        $select_qu = $this->product_v2->left_join_product($sessionID);
+        $totalPrice = 0;
+        echo "<b>ตะกร้าสินค้า</b><p><table border=1>";
+        echo "<tr>". 
+            "<td>ชื่อสินค้า</td>". 
+            "<td>ราคา (บาท)</td>".
+            "<td>จำนวน (รายการ)</td>". 
+            "<td>ราคารวม (บาท)</td>". 
+            "<td>คลิก Remove สินค้าออกจากตะกร้า</td>". 
+            "</tr>";
+        // วนลูปเพื่อดึงรายการสินค้ามาแสดง 
+        foreach($select_qu as $row)
+        {
+            $addProductID = $row["productID"]; //เก็บรหัสสินค้าไว้ในตัวแปร $addProductID
+            $productName = $row["name"]; // เก็บชื่อสินค้าไว้ในตัวแปร $productName 
+            $productPrice = $row["price"]; // เก็บราคาสินค้าไว้ในตัวแปร $productPrice
+            $quantity = $row["quantity"]; // เก็บจำนวนสินค้าไว้ในตัวแปร $quantity
+
+            echo "<tr>";
+            echo "<td>$productName</td><td>$productPrice</td>";
+            echo "<td>$quantity</td>";
+            // คำนวณราคาสินค้ารวม = ราคา * จำนวนสินค้า 
+            echo "<td align='right'>".($productPrice * $quantity)."</td>";
+
+            // ลิงค์ remove เรียกฟังก์ชัน removeBasket เพื่อเอาสินค้าออกจากตะกร้า
+            echo "<td><a href='#'". 
+                            "onClick='removeBasket($addProductID, orders)'>".
+                            "Remove </a></td></tr>";
+            // คำนวณราคาสุทธิ = ราคาสุทธิ + (ราคาสินค้า * จำนวนสินค้า)
+            $totalPrice = $totalPrice + ($productPrice * $quantity);
+        } 
+        // แสดงราคาสินค้าสุทธิ
+        echo "<tr><td colspan=4 align='right'>". 
+            "<b> ราคาสุทธิ $totalPrice บาท</b></td></tr></table></form>";
+            
+            }
 }

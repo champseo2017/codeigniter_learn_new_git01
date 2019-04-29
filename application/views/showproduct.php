@@ -21,14 +21,13 @@
 
             // ฟังก์ชั่นลบรายการสินค้าออกจากตะกร้า
             function removeBasket(productID, Div){
-
-                var params = "productID="+productID; //ตัวแปร ProductID
-                                                    //สำหรับเก็บรหัสสินค้าเพื่อส่งไปยัง
-                                                    // removeBasket.php
-                var url = "removeBasket.php";//ชื่อไฟล์ที่กำหนดให้ทำการประมวลผล
-                                            // เพื่อลบรายการสินค้าออกจากตะกร้า
+                
+                var url_index = "<?php echo base_url(); ?>";
+                var params = "productID="+productID;                  
+                var url = url_index + "ListProduct/removeBasket";                 
                 var Addnew = new Ajax.Updater(Div, url,
                 {method: "get", parameters: params});
+
             }
 
             // ฟังก์ชั่นเพิ่มรายการสินค้าลงตะกร้า
@@ -36,13 +35,10 @@
 
                 var url_index = "<?php echo base_url(); ?>";
                 var params = "productID="+productID;
-                // ตัวแปร ProductID สำหรับเก็บรหัสสินค้าเพื่อส่งไปยัง addBasKet.php
-               
                 var url = url_index + "ListProduct/addBasket";
-                // ชื่อไฟล์ที่กำหนดให้ทำการประมวลผลเพื่อเพิ่มรายการสินค้าลงตะกร้า
-
                 var Addnew = new Ajax.Updater(Div, url,
                 {method: "get", parameters: params});
+                
             }
         </script>
     </head>
