@@ -96,7 +96,8 @@ class Welcome extends CI_Controller {
 		echo '<a href="If_01/if_02">if_02</a><br/>';
 		echo '<a href="If_01/if_03">if_03</a><br/>';
 		echo '<a href="ListProduct">Ajax product</a><br/>';
+		echo '<a href="Date_number_02">Date_number_02</a><br/>';
+		echo '<a href="Captcha_helper">Captcha helper</a><br/>';
 
-		
 	}
 }
